@@ -1,4 +1,4 @@
-from typing import Any, Optional
+from typing import Any, Optional, TypedDict, Type
 from logging import getLogger
 import datetime as dt
 import time

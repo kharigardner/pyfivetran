@@ -60,7 +60,7 @@ class Connector(ApiDataclass):
     
     @property
     def raw(self) -> Dict[str, Any]:
-        return self._raw if self._raw else self.__dict__ # type: ignore
+        return self._raw if hasattr(self, '_raw') else self.__dict__ # type: ignore
     
     def modify(
             self,
@@ -105,15 +105,20 @@ class Connector(ApiDataclass):
         if sync_frequency is not None:
             payload['sync_frequency'] = sync_frequency
 
-        for key, value in payload.items():
-            if value is not None:
-                setattr(self, key, value)
+        # moving this under the resp, so we only modify if the function succeeds
 
-        return self.endpoint._request(
+        resp = self.endpoint._request(
             method='PATCH',
             url=self.as_url,
             json=payload
         ).json()
+
+        for key, value in payload.items():
+            if value is not None:
+                setattr(self, key, value)
+
+        return resp
+
     
     def modify_state(
             self,

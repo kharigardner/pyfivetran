@@ -1,1 +1,2 @@
-from .client import FivetranClient
+from .client import FivetranClient 
+from .endpoints import * # noqa
