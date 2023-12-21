@@ -36,7 +36,8 @@ jobs:
       uses: actions/cache@v3
       with:
         path: .venv
-        key: venv-${{ runner.os }}-${{ hashFiles('**/poetry.lock') }}
+        key: venv-${{ runner.os }}-${{ steps.setup-python.outputs.python-version }}-${{ hashFiles('**/poetry.lock') }}
+
     
     - name: Install dependencies again
       run: poetry install --with dev --no-interaction
@@ -44,7 +45,7 @@ jobs:
     - name: Run tests
       shell: bash
       run: |
-        pytest tests --cov=pyfivetran --cov-report=xml
+        poetry run pytest tests --cov=pyfivetran --cov-report=xml
 
     - name: Upload coverage reports to Codecov
       uses: codecov/codecov-action@v3
