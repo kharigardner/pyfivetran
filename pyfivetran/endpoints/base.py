@@ -1,16 +1,13 @@
-from typing import TypedDict, Tuple, List, Optional, Dict, Any
+from typing import List, Optional, Dict, Any
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
 from httpx import Client, Response
 
-from pyfivetran.shed import ApiError, GeneralApiResponse, PaginatedApiResponse
+from pyfivetran.shed import ApiError, PaginatedApiResponse
 
 
 class Endpoint(ABC):
-    def __init__(
-            self,
-            client: Client
-    ) -> None:
+    def __init__(self, client: Client) -> None:
         self.client = client
 
     def _request(self, **kwargs) -> Response:
@@ -24,14 +21,14 @@ class Endpoint(ABC):
             response.raise_for_status()
         except Exception as e:
             raise ApiError(response.text) from e
-        
+
         return response
 
     def _paginate(
-            self,
-            first_response: Response,
-            endpoint: str,
-            limit: Optional[int] = None,
+        self,
+        first_response: Response,
+        endpoint: str,
+        limit: Optional[int] = None,
     ) -> List[Response]:
         """
         Helper function to paginate through API responses
@@ -48,17 +45,14 @@ class Endpoint(ABC):
             first_response.raise_for_status()
         except Exception as e:
             raise ApiError(first_response.text) from e
-        
+
         responses = [first_response]
         json_resp: PaginatedApiResponse = first_response.json()
 
-        while json_resp.get('next_cursor'):
+        while json_resp.get("next_cursor"):
             next_response = self._request(
                 url=endpoint,
-                params={
-                    'cursor': json_resp.get('next_cursor'),
-                    'limit': limit
-                }
+                params={"cursor": json_resp.get("next_cursor"), "limit": limit},
             )
 
             try:
@@ -70,12 +64,13 @@ class Endpoint(ABC):
             json_resp = next_response.json()
 
         return responses
-    
+
+
 @dataclass
 class ApiDataclass(ABC):
     endpoint: Endpoint
 
     @classmethod
     @abstractmethod
-    def _from_dict(cls, endpoint, d: Dict[str, Any]) -> 'ApiDataclass':
+    def _from_dict(cls, endpoint, d: Dict[str, Any]) -> "ApiDataclass":
         ...

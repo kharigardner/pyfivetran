@@ -32,7 +32,7 @@ git clone https://github.com/kharigardner/pyfivetran.git
 cd pyfivetran
 
 poetry install
-poetry install -G dev
+poetry install --with dev
 
 # run tests
 pytest tests

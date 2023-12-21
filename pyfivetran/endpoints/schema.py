@@ -1,41 +1,27 @@
 from __future__ import annotations
 
-from typing import (
-    Optional, 
-    List,
-    Dict,
-    Any,
-    Literal
-)
+from typing import Optional, Dict, Any, Literal
 
-from pyfivetran.endpoints.base import (
-    Endpoint,
-    Client
-)
+from pyfivetran.endpoints.base import Endpoint, Client
 
-from pyfivetran.shed import (
-    GeneralApiResponse,
-    BASE_API_URL,
-    API_VERSION,
-    ApiError,
-    PaginatedApiResponse
-)
+from pyfivetran.shed import GeneralApiResponse, BASE_API_URL, API_VERSION, ApiError
+
 
 class ConnectorSchemaEndpoint(Endpoint):
-    BASE_URL: str = BASE_API_URL + '/' + API_VERSION
+    BASE_URL: str = BASE_API_URL + "/" + API_VERSION
 
     def __init__(self, client: Client) -> None:
         self.client = client
         super().__init__(client)
 
     def modify_connector_column_config(
-            self,
-            connector_id: str,
-            schema_name: str,
-            table_name: str,
-            column_name: str,
-            enabled: Optional[bool] = None,
-            hashed: Optional[bool] = None
+        self,
+        connector_id: str,
+        schema_name: str,
+        table_name: str,
+        column_name: str,
+        enabled: Optional[bool] = None,
+        hashed: Optional[bool] = None,
     ) -> GeneralApiResponse:
         """
         Modifies the column configuration for a specific connector.
@@ -51,27 +37,27 @@ class ConnectorSchemaEndpoint(Endpoint):
         payload = dict()
 
         if enabled is not None:
-            payload['enabled'] = enabled
+            payload["enabled"] = enabled
 
         if hashed is not None:
-            payload['hashed'] = hashed
-        
+            payload["hashed"] = hashed
+
         if not payload:
             # Is this a normal pattern? On optional args, return an error if trying to update with nothing?
-            raise ApiError('No payload provided to modify_connector_column_config')
-    
+            raise ApiError("No payload provided to modify_connector_column_config")
+
         return self._request(
-            method='PATCH',
-            url=f'{self.BASE_URL}/connectors/{connector_id}/schemas/{schema_name}/tables/{table_name}/columns/{column_name}',
-            json=payload
+            method="PATCH",
+            url=f"{self.BASE_URL}/connectors/{connector_id}/schemas/{schema_name}/tables/{table_name}/columns/{column_name}",
+            json=payload,
         ).json()
-    
+
     def modify_connector_database_schema_config(
-            self,
-            connector_id: str,
-            schema_name: str,
-            enabled: Optional[bool] = None,
-            tables: Optional[Dict[Any, Any]] = None
+        self,
+        connector_id: str,
+        schema_name: str,
+        enabled: Optional[bool] = None,
+        tables: Optional[Dict[Any, Any]] = None,
     ) -> GeneralApiResponse:
         """
         Modify connector database schema config.
@@ -85,26 +71,30 @@ class ConnectorSchemaEndpoint(Endpoint):
         payload: Dict[Any, Any] = dict()
 
         if enabled is not None:
-            payload['enabled'] = enabled
+            payload["enabled"] = enabled
 
         if tables is not None:
-            payload['tables'] = tables
-        
+            payload["tables"] = tables
+
         if not payload:
             # Is this a normal pattern? On optional args, return an error if trying to update with nothing?
-            raise ApiError('No payload provided to modify_connector_database_schema_config')
-        
+            raise ApiError(
+                "No payload provided to modify_connector_database_schema_config"
+            )
+
         return self._request(
-            method='PATCH',
-            url=f'{self.BASE_URL}/connectors/{connector_id}/schemas/{schema_name}',
-            json=payload
+            method="PATCH",
+            url=f"{self.BASE_URL}/connectors/{connector_id}/schemas/{schema_name}",
+            json=payload,
         ).json()
 
     def modify_connector_schema_config(
-            self,
-            connector_id: str,
-            schemas: Optional[Dict[Any, Any]] = None,
-            schema_change_handling: Optional[Literal['ALLOW_ALL', 'ALLOW_COLUMNS', 'BLOCK_ALL']] = None,
+        self,
+        connector_id: str,
+        schemas: Optional[Dict[Any, Any]] = None,
+        schema_change_handling: Optional[
+            Literal["ALLOW_ALL", "ALLOW_COLUMNS", "BLOCK_ALL"]
+        ] = None,
     ) -> GeneralApiResponse:
         """
         Updates the schema configuration for a specific connector.
@@ -115,35 +105,37 @@ class ConnectorSchemaEndpoint(Endpoint):
         :return: GeneralApiResponse
         """
 
-        if schema_change_handling not in ['ALLOW_ALL', 'ALLOW_COLUMNS', 'BLOCK_ALL']:
-            raise ApiError('Invalid schema_change_handling value provided') from ValueError()
-        
+        if schema_change_handling not in ["ALLOW_ALL", "ALLOW_COLUMNS", "BLOCK_ALL"]:
+            raise ApiError(
+                "Invalid schema_change_handling value provided"
+            ) from ValueError()
+
         payload: Dict[Any, Any] = dict()
 
         if schemas is not None:
-            payload['schemas'] = schemas
+            payload["schemas"] = schemas
 
         if schema_change_handling is not None:
-            payload['schema_change_handling'] = schema_change_handling
-        
+            payload["schema_change_handling"] = schema_change_handling
+
         if not payload:
             # Is this a normal pattern? On optional args, return an error if trying to update with nothing?
-            raise ApiError('No payload provided to modify_connector_schema_config')
-        
+            raise ApiError("No payload provided to modify_connector_schema_config")
+
         return self._request(
-            method='PATCH',
-            url=f'{self.BASE_URL}/connectors/{connector_id}/schemas',
-            json=payload
+            method="PATCH",
+            url=f"{self.BASE_URL}/connectors/{connector_id}/schemas",
+            json=payload,
         ).json()
 
     def modify_table_config(
-            self,
-            connector_id: str,
-            schema_name: str,
-            table_name: str,
-            enabled: Optional[bool] = None,
-            columns: Optional[Dict[Any, Any]] = None,
-            sync_mode: Optional[Literal['SOFT_DELETE', 'HISTORY', 'LIVE']] = None,
+        self,
+        connector_id: str,
+        schema_name: str,
+        table_name: str,
+        enabled: Optional[bool] = None,
+        columns: Optional[Dict[Any, Any]] = None,
+        sync_mode: Optional[Literal["SOFT_DELETE", "HISTORY", "LIVE"]] = None,
     ) -> GeneralApiResponse:
         """
         Updates the table configuration for a specific connector.
@@ -157,38 +149,35 @@ class ConnectorSchemaEndpoint(Endpoint):
         :return: GeneralApiResponse
         """
 
-        if sync_mode not in ['SOFT_DELETE', 'HISTORY', 'LIVE']:
-            raise ApiError('Invalid sync_mode value provided') from ValueError()
-        
+        if sync_mode not in ["SOFT_DELETE", "HISTORY", "LIVE"]:
+            raise ApiError("Invalid sync_mode value provided") from ValueError()
+
         payload: Dict[Any, Any] = dict()
 
         if enabled is not None:
-            payload['enabled'] = enabled
+            payload["enabled"] = enabled
 
         if columns is not None:
-            payload['columns'] = columns
+            payload["columns"] = columns
 
         if sync_mode is not None:
-            payload['sync_mode'] = sync_mode
-        
+            payload["sync_mode"] = sync_mode
+
         if not payload:
             # Is this a normal pattern? On optional args, return an error if trying to update with nothing?
-            raise ApiError('No payload provided to modify_table_config')
-        
+            raise ApiError("No payload provided to modify_table_config")
+
         return self._request(
-            method='PATCH',
-            url=f'{self.BASE_URL}/connectors/{connector_id}/schemas/{schema_name}/tables/{table_name}',
-            json=payload
+            method="PATCH",
+            url=f"{self.BASE_URL}/connectors/{connector_id}/schemas/{schema_name}/tables/{table_name}",
+            json=payload,
         ).json()
-    
 
     def resync_connector_table_data(
-            self,
-            connector_id: str,
-            **prop_kwargs: Optional[Dict[str, Any]]
+        self, connector_id: str, **prop_kwargs: Optional[Dict[str, Any]]
     ) -> GeneralApiResponse:
         """
-        Triggers a historical sync of all data for multiple schema tables within a connector. 
+        Triggers a historical sync of all data for multiple schema tables within a connector.
         This action does not override the standard sync frequency you defined in the Fivetran dashboard.
 
         :param connector_id: Unique ID of the connector in Fivetran
@@ -196,15 +185,13 @@ class ConnectorSchemaEndpoint(Endpoint):
         """
 
         return self._request(
-            method='POST',
-            url=f'{self.BASE_URL}/connectors/{connector_id}/schemas/tables/resync',
-            json=prop_kwargs
+            method="POST",
+            url=f"{self.BASE_URL}/connectors/{connector_id}/schemas/tables/resync",
+            json=prop_kwargs,
         ).json()
-    
+
     def reload_connector_schema_config(
-            self,
-            connector_id: str,
-            exclude_mode: Optional[str] = None
+        self, connector_id: str, exclude_mode: Optional[str] = None
     ) -> GeneralApiResponse:
         """
         Reloads the schema configuration for a specific connector.
@@ -217,22 +204,19 @@ class ConnectorSchemaEndpoint(Endpoint):
         payload: Dict[Any, Any] = dict()
 
         if exclude_mode is not None:
-            payload['exclude_mode'] = exclude_mode
-        
+            payload["exclude_mode"] = exclude_mode
+
         if not payload:
             # Is this a normal pattern? On optional args, return an error if trying to update with nothing?
-            raise ApiError('No payload provided to reload_connector_schema_config')
-        
+            raise ApiError("No payload provided to reload_connector_schema_config")
+
         return self._request(
-            method='POST',
-            url=f'{self.BASE_URL}/connectors/{connector_id}/schemas/reload',
-            json=payload
+            method="POST",
+            url=f"{self.BASE_URL}/connectors/{connector_id}/schemas/reload",
+            json=payload,
         ).json()
-    
-    def get_connector_schema_config(
-            self,
-            connector_id: str
-    ) -> GeneralApiResponse:
+
+    def get_connector_schema_config(self, connector_id: str) -> GeneralApiResponse:
         """
         Get the connector schema config for an existing connector within your Fivetran account.
 
@@ -241,15 +225,11 @@ class ConnectorSchemaEndpoint(Endpoint):
         """
 
         return self._request(
-            method='GET',
-            url=f'{self.BASE_URL}/connectors/{connector_id}/schemas'
+            method="GET", url=f"{self.BASE_URL}/connectors/{connector_id}/schemas"
         ).json()
-    
+
     def get_source_table_columns_config(
-            self,
-            connector_id: str,
-            schema: str,
-            table: str
+        self, connector_id: str, schema: str, table: str
     ) -> GeneralApiResponse:
         """
         Get the source table columns config for an existing connector within your Fivetran account.
@@ -261,6 +241,6 @@ class ConnectorSchemaEndpoint(Endpoint):
         """
 
         return self._request(
-            method='GET',
-            url=f'{self.BASE_URL}/connectors/{connector_id}/schemas/{schema}/tables/{table}/columns'
+            method="GET",
+            url=f"{self.BASE_URL}/connectors/{connector_id}/schemas/{schema}/tables/{table}/columns",
         ).json()

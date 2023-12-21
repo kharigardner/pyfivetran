@@ -1,10 +1,8 @@
-from typing import Any, Optional, TypedDict, Type
 from logging import getLogger
 import datetime as dt
-import time
-from dataclasses import make_dataclass
 
 logger = getLogger(__name__)
+
 
 def deserialize_timestamp(dt_str: str) -> dt.datetime:
     """
@@ -13,7 +11,8 @@ def deserialize_timestamp(dt_str: str) -> dt.datetime:
     :param dt_str: The timestamp to deserialize
     :return: The deserialized timestamp
     """
-    return dt.datetime.strptime(dt_str, '%Y-%m-%dT%H:%M:%SZ')
+    return dt.datetime.strptime(dt_str, "%Y-%m-%dT%H:%M:%SZ")
+
 
 def serialize_timezone(tz: str | dt.tzinfo) -> int:
     """
@@ -28,10 +27,12 @@ def serialize_timezone(tz: str | dt.tzinfo) -> int:
         try:
             tz_return = int(tz)
         except ValueError as e:
-            logger.warning(f'Invalid timezone: {tz}')
-            raise ValueError(f'Invalid timezone: {tz}... unable to serialize string format') from e
+            logger.warning(f"Invalid timezone: {tz}")
+            raise ValueError(
+                f"Invalid timezone: {tz}... unable to serialize string format"
+            ) from e
 
     elif isinstance(tz, dt.tzinfo):
-        tz_return = int(tz.utcoffset(None).seconds / 3600) # type: ignore
+        tz_return = int(tz.utcoffset(None).seconds / 3600)  # type: ignore
 
     return tz_return

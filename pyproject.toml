@@ -41,7 +41,8 @@ exclude = [
     "venv",
     "__pypackages__",
     "build",
-    "dist"
+    "dist",
+    "tests"
 ]
 
 line-length = 88

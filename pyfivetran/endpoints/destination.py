@@ -1,35 +1,20 @@
 from __future__ import annotations
 
-from typing import (
-    Optional,
-    List,
-    Dict,
-    Any,
-    Literal
-)
-from datetime import datetime, tzinfo
+from typing import Optional, List, Dict, Any
+from datetime import tzinfo
 from dataclasses import dataclass
 from enum import Enum
 
-from httpx import HTTPStatusError
 
-from pyfivetran.endpoints.base import (
-    Endpoint,
-    Client,
-    ApiDataclass
-)
-from pyfivetran.shed import (
-    GeneralApiResponse,
-    BASE_API_URL,
-    API_VERSION,
-    ApiError,
-    PaginatedApiResponse
-)
+from pyfivetran.endpoints.base import Endpoint, Client, ApiDataclass
+from pyfivetran.shed import GeneralApiResponse, BASE_API_URL, API_VERSION
 from pyfivetran.utils import serialize_timezone
 
+
 class Region(Enum):
-    GCP_US_EAST4 = 'GCP_US_EAST4'
-    GCP_US_WEST1 = 'GCP_US_WEST1'
+    GCP_US_EAST4 = "GCP_US_EAST4"
+    GCP_US_WEST1 = "GCP_US_WEST1"
+
 
 @dataclass
 class Destination(ApiDataclass):
@@ -46,29 +31,26 @@ class Destination(ApiDataclass):
 
     @property
     def as_url(self) -> str:
-        return f'{BASE_API_URL}/{API_VERSION}/destinations/{self.fivetran_id}'
+        return f"{BASE_API_URL}/{API_VERSION}/destinations/{self.fivetran_id}"
 
     @property
     def raw(self) -> Dict[str, Any]:
-        return self._raw if hasattr(self, '_raw') else self.__dict__
-    
+        return self._raw if hasattr(self, "_raw") else self.__dict__
+
     def delete(self) -> GeneralApiResponse:
-        resp = self.endpoint._request(
-            method='DELETE',
-            url=self.as_url
-        ).json()
+        resp = self.endpoint._request(method="DELETE", url=self.as_url).json()
 
         self._is_deleted = True
         return resp
 
     def modify(
-            self,
-            region: Optional[str | Region] = None,
-            config: Optional[Dict[str, Any]] = None,
-            trust_certificates: Optional[bool] = None,
-            trust_fingerprints: Optional[bool] = None,
-            run_setup_tests: Optional[bool] = None,
-            time_zone_offset: Optional[str | int | tzinfo] = None
+        self,
+        region: Optional[str | Region] = None,
+        config: Optional[Dict[str, Any]] = None,
+        trust_certificates: Optional[bool] = None,
+        trust_fingerprints: Optional[bool] = None,
+        run_setup_tests: Optional[bool] = None,
+        time_zone_offset: Optional[str | int | tzinfo] = None,
     ) -> GeneralApiResponse:
         """
         Modifies the destination.
@@ -92,35 +74,33 @@ class Destination(ApiDataclass):
         payload: Dict[str, Any] = dict()
 
         if region is not None:
-            payload['region'] = region
+            payload["region"] = region
 
         if config is not None:
-            payload['config'] = config
+            payload["config"] = config
 
         if trust_certificates is not None:
-            payload['trust_certificates'] = trust_certificates
+            payload["trust_certificates"] = trust_certificates
 
         if trust_fingerprints is not None:
-            payload['trust_fingerprints'] = trust_fingerprints
+            payload["trust_fingerprints"] = trust_fingerprints
 
         if run_setup_tests is not None:
-            payload['run_setup_tests'] = run_setup_tests
+            payload["run_setup_tests"] = run_setup_tests
 
         if time_zone_offset is not None:
             if not isinstance(time_zone_offset, int):
                 time_zone_offset = serialize_timezone(time_zone_offset)
-            payload['time_zone_offset'] = time_zone_offset
+            payload["time_zone_offset"] = time_zone_offset
 
         return self.endpoint._request(
-            method='PATCH',
-            url=self.as_url,
-            json=payload
+            method="PATCH", url=self.as_url, json=payload
         ).json()
-    
+
     def run_setup_tests(
-            self,
-            trust_certificates: Optional[bool] = None,
-            trust_fingerprints: Optional[bool] = None
+        self,
+        trust_certificates: Optional[bool] = None,
+        trust_fingerprints: Optional[bool] = None,
     ) -> GeneralApiResponse:
         """
         Runs setup tests on the destination.
@@ -132,52 +112,48 @@ class Destination(ApiDataclass):
         payload = dict()
 
         if trust_certificates is not None:
-            payload['trust_certificates'] = trust_certificates
+            payload["trust_certificates"] = trust_certificates
 
         if trust_fingerprints is not None:
-            payload['trust_fingerprints'] = trust_fingerprints
+            payload["trust_fingerprints"] = trust_fingerprints
 
         return self.endpoint._request(
-            method='POST',
-            url=f'{self.as_url}/test',
-            json=payload
+            method="POST", url=f"{self.as_url}/test", json=payload
         ).json()
 
     @classmethod
-    def _from_dict(cls, endpoint, d: Dict[str, Any]) -> 'Destination':
+    def _from_dict(cls, endpoint, d: Dict[str, Any]) -> "Destination":
         """
         Helper method for deserializing from a dict.
 
         :param d: The dict to deserialize
         :return: The deserialized object
         """
-        region: Region = Region(d.get('region')) # type: ignore 
+        region: Region = Region(d.get("region"))  # type: ignore
 
-        #TODO: add logic to serialize back into TZ info
+        # TODO: add logic to serialize back into TZ info
 
         return cls(
             endpoint=endpoint,
-            fivetran_id=d.get('id'), # type: ignore
-            service=d.get('service'), # type: ignore
+            fivetran_id=d.get("id"),  # type: ignore
+            service=d.get("service"),  # type: ignore
             region=region,
-            setup_status=d.get('setup_status'), # type: ignore
-            group_id=d.get('group_id'), # type: ignore
-            time_zone_offset=d.get('time_zone_offset'), # type: ignore
-            setup_tests=d.get('setup_tests'), # type: ignore
-            config=d.get('config'), # type: ignore
+            setup_status=d.get("setup_status"),  # type: ignore
+            group_id=d.get("group_id"),  # type: ignore
+            time_zone_offset=d.get("time_zone_offset"),  # type: ignore
+            setup_tests=d.get("setup_tests"),  # type: ignore
+            config=d.get("config"),  # type: ignore
         )
-    
+
+
 class DestinationEndpoint(Endpoint):
-    BASE_URL: str = BASE_API_URL + '/' + API_VERSION
+    BASE_URL: str = BASE_API_URL + "/" + API_VERSION
 
     def __init__(self, client: Client) -> None:
         self.client: Client = client
         super().__init__(client)
 
-    def get_destination(
-            self,
-            destination_id: str
-    ) -> Destination:
+    def get_destination(self, destination_id: str) -> Destination:
         """
         Get a destination object.
 
@@ -185,22 +161,23 @@ class DestinationEndpoint(Endpoint):
         :return: Destination
         """
         resp: GeneralApiResponse = self._request(
-            method='GET',
-            url=f'{self.BASE_URL}/destinations/{destination_id}'
+            method="GET", url=f"{self.BASE_URL}/destinations/{destination_id}"
         ).json()
 
-        return Destination._from_dict(self, resp.get('data')) # type: ignore
-    
+        return Destination._from_dict(self, resp.get("data"))  # type: ignore
+
     def create_destination(
-            self,
-            group_id: str,
-            service: str,
-            time_zone_offset: str | int | tzinfo,
-            config: Dict[str, Any], #TODO: probably should replace any type with a JSON serializable type alias instead
-            trust_certificates: bool = False,
-            trust_fingerprints: bool = False,
-            run_setup_tests: Optional[bool] = None,
-            region: Optional[str | Region] = None
+        self,
+        group_id: str,
+        service: str,
+        time_zone_offset: str | int | tzinfo,
+        config: Dict[
+            str, Any
+        ],  # TODO: probably should replace any type with a JSON serializable type alias instead
+        trust_certificates: bool = False,
+        trust_fingerprints: bool = False,
+        run_setup_tests: Optional[bool] = None,
+        region: Optional[str | Region] = None,
     ) -> Destination:
         """
         Creates a new destination within a specified group in your Fivetran account.
@@ -219,8 +196,8 @@ class DestinationEndpoint(Endpoint):
             try:
                 region = Region(region)
             except ValueError as e:
-                raise ValueError(f'Invalid region: {region}') from e
-        
+                raise ValueError(f"Invalid region: {region}") from e
+
         if isinstance(time_zone_offset, (str, tzinfo)):
             time_zone_offset = serialize_timezone(time_zone_offset)
 
@@ -230,20 +207,17 @@ class DestinationEndpoint(Endpoint):
             time_zone_offset=time_zone_offset,
             config=config,
             trust_certificates=trust_certificates,
-            trust_fingerprints=trust_fingerprints
+            trust_fingerprints=trust_fingerprints,
         )
 
         if run_setup_tests is not None:
-            payload['run_setup_tests'] = run_setup_tests
+            payload["run_setup_tests"] = run_setup_tests
 
         if region is not None:
-            payload['region'] = region
+            payload["region"] = region
 
         resp: GeneralApiResponse = self._request(
-            method='POST',
-            url=f'{self.BASE_URL}/destinations',
-            json=payload
+            method="POST", url=f"{self.BASE_URL}/destinations", json=payload
         ).json()
-        
-        return Destination._from_dict(self, resp.get('data')) # type: ignore
 
+        return Destination._from_dict(self, resp.get("data"))  # type: ignore
