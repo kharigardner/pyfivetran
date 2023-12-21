@@ -11,7 +11,12 @@ from pyfivetran.endpoints import (
     CertificateEndpoint,
     ConnectorEndpoint,
     ConnectorSchemaEndpoint,
-    DestinationEndpoint
+    DestinationEndpoint,
+    GroupEndpoint,
+    LogEndpoint,
+    RoleEndpoint,
+    UserEndpoint,
+    WebhookEndpoint
 )
 
 class AuthenticationTuple(NamedTuple):
@@ -27,6 +32,8 @@ class FivetranClient:
             api_key: str,
             api_secret: str
     ) -> None:
+        if not api_key or not api_secret:
+            raise ValueError("api_key and api_secret are required")
         self.api_key = api_key
         self.api_secret = api_secret
         self._client = httpx.Client()
@@ -35,7 +42,7 @@ class FivetranClient:
     def authentication(self) -> AuthenticationTuple:
         return AuthenticationTuple(
             basic=httpx.BasicAuth(self.api_key, self.api_secret),
-            mapping={'Authorization': f'Basic {self.api_key}'}
+            mapping={'Authorization': f'Bearer {self.api_key}:{self.api_secret}'}
         )
     
     @property
@@ -59,3 +66,23 @@ class FivetranClient:
     @lazy
     def destination_endpoint(self) -> DestinationEndpoint:
         return DestinationEndpoint(self.client)
+    
+    @lazy
+    def group_endpoint(self) -> GroupEndpoint:
+        return GroupEndpoint(self.client)
+    
+    @lazy
+    def logs_endpoint(self) -> LogEndpoint:
+        return LogEndpoint(self.client)
+    
+    @lazy
+    def role_endpoint(self) -> RoleEndpoint:
+        return RoleEndpoint(self.client)
+    
+    @lazy
+    def user_endpoint(self) -> UserEndpoint:
+        return UserEndpoint(self.client)
+    
+    @lazy
+    def webhook_endpoint(self) -> WebhookEndpoint:
+        return WebhookEndpoint(self.client)

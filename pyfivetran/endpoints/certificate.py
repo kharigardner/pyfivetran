@@ -50,12 +50,6 @@ class CertificateEndpoint(Endpoint):
 
         if connector_id:
             payload["connector_id"] = connector_id
-
-        response = self._request(
-            method="POST",
-            url=f'{self.BASE_URL}/certificates',
-            json=payload
-        )
         
         return self._request(
             method="POST",

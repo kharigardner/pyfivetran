@@ -244,13 +244,13 @@ class GroupEndpoint(Endpoint):
         """
         payload = dict(name=name)
 
-        response = self._request(
+        response: GeneralApiResponse = self._request(
             method='POST',
             url=f'{self.BASE_URL}/groups',
             json=payload
         ).json()
 
-        return Group._from_dict(self, response)
+        return Group._from_dict(self, response['data']) # type: ignore
 
     def list_groups(
             self,
@@ -305,3 +305,5 @@ class GroupEndpoint(Endpoint):
             self,
             resp['data'] # type: ignore
         )
+    
+    

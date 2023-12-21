@@ -190,3 +190,60 @@ class DestinationEndpoint(Endpoint):
         ).json()
 
         return Destination._from_dict(self, resp.get('data')) # type: ignore
+    
+    def create_destination(
+            self,
+            group_id: str,
+            service: str,
+            time_zone_offset: str | int | tzinfo,
+            config: Dict[str, Any], #TODO: probably should replace any type with a JSON serializable type alias instead
+            trust_certificates: bool = False,
+            trust_fingerprints: bool = False,
+            run_setup_tests: Optional[bool] = None,
+            region: Optional[str | Region] = None
+    ) -> Destination:
+        """
+        Creates a new destination within a specified group in your Fivetran account.
+
+        :param group_id: The ID of the group
+        :param service: The name of the service
+        :param time_zone_offset: The time zone offset
+        :param config: The config of the destination
+        :param trust_certificates: Whether to trust certificates
+        :param trust_fingerprints: Whether to trust fingerprints
+        :param run_setup_tests: Whether to run setup tests
+        :param region: The region of the destination
+        :return: Destination
+        """
+        if isinstance(region, str):
+            try:
+                region = Region(region)
+            except ValueError as e:
+                raise ValueError(f'Invalid region: {region}') from e
+        
+        if isinstance(time_zone_offset, (str, tzinfo)):
+            time_zone_offset = serialize_timezone(time_zone_offset)
+
+        payload = dict(
+            group_id=group_id,
+            service=service,
+            time_zone_offset=time_zone_offset,
+            config=config,
+            trust_certificates=trust_certificates,
+            trust_fingerprints=trust_fingerprints
+        )
+
+        if run_setup_tests is not None:
+            payload['run_setup_tests'] = run_setup_tests
+
+        if region is not None:
+            payload['region'] = region
+
+        resp: GeneralApiResponse = self._request(
+            method='POST',
+            url=f'{self.BASE_URL}/destinations',
+            json=payload
+        ).json()
+        
+        return Destination._from_dict(self, resp.get('data')) # type: ignore
+

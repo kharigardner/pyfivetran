@@ -4,7 +4,7 @@ BASE_API_URL = 'https://api.fivetran.com'
 API_VERSION = "v1"
 
 class GeneralApiResponse(TypedDict):
-    code: str
+    code: str | int
     message: Optional[str]
     data: Optional[Dict[str, Any]]
     

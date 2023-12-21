@@ -1,6 +1,6 @@
 import pytest
 
-import datetime as dt
+import datetime
 
 from pyfivetran.utils import deserialize_timestamp, serialize_timezone
 
@@ -9,19 +9,19 @@ class TestDeserializeTimestamp:
     # Returns a datetime object when given a valid timestamp string in the format 'YYYY-MM-DDTHH:MM:SSZ'
     def test_valid_timestamp(self):
         timestamp = '2019-08-24T14:15:22Z'
-        expected = dt.datetime(2019, 8, 24, 14, 15, 22)
+        expected = datetime.datetime(2019, 8, 24, 14, 15, 22)
         assert deserialize_timestamp(timestamp) == expected
 
     # Returns a datetime object with the correct year, month, day, hour, minute, and second values
     def test_correct_values(self):
         timestamp = '2022-12-31T23:59:59Z'
-        expected = dt.datetime(2022, 12, 31, 23, 59, 59)
+        expected = datetime.datetime(2022, 12, 31, 23, 59, 59)
         assert deserialize_timestamp(timestamp) == expected
 
     # Handles timestamps with single-digit months, days, hours, minutes, and seconds
     def test_single_digit_values(self):
         timestamp = '2022-01-01T01:02:03Z'
-        expected = dt.datetime(2022, 1, 1, 1, 2, 3)
+        expected = datetime.datetime(2022, 1, 1, 1, 2, 3)
         assert deserialize_timestamp(timestamp) == expected
 
     # Raises a ValueError when given an empty string
@@ -54,9 +54,9 @@ class TestSerializeTimezone:
 
     # Serializes a timezone object to its integer offset representation
     def test_serialize_timezone_object(self):
-        class FakeTimezone(dt.tzinfo):
+        class FakeTimezone(datetime.tzinfo):
             def utcoffset(self, dt):
-                return dt.timedelta(hours=5)
+                return datetime.timedelta(hours=5)
 
         tz = FakeTimezone()
         assert serialize_timezone(tz) == 5

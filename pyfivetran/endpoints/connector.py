@@ -5,7 +5,9 @@ from typing import (
     List,
     Dict,
     Any,
-    Literal
+    Literal,
+    overload,
+    TYPE_CHECKING
 )
 from datetime import datetime
 from dataclasses import dataclass
@@ -24,6 +26,9 @@ from pyfivetran.shed import (
     ApiError,
     PaginatedApiResponse
 )
+
+if TYPE_CHECKING:
+    from pyfivetran.endpoints.users import User
 
 @dataclass
 class Connector(ApiDataclass):
@@ -74,7 +79,7 @@ class Connector(ApiDataclass):
             sync_frequency: Optional[int] = None,
     ) -> GeneralApiResponse:
         
-        if sync_frequency not in [
+        if sync_frequency and sync_frequency not in [
             5, 15, 30, 60, 120, 180, 360, 480, 720, 1440
         ]:
             raise ApiError('Invalid sync_frequency value provided') from ValueError()
@@ -269,7 +274,6 @@ class Connector(ApiDataclass):
         )
         return cls_to_return
         
-
 
 class ConnectorEndpoint(Endpoint):
     BASE_URL: str = BASE_API_URL + '/' + API_VERSION

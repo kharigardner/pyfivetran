@@ -5,7 +5,8 @@ from .destination import DestinationEndpoint, Destination
 from .group import GroupEndpoint, Group
 from .logs import LogEndpoint
 from .roles import RoleEndpoint
-from .users import User
+from .users import User, UserEndpoint
+from .webhook import WebhookEndpoint
 
 __all__ = [
     'CertificateEndpoint',
@@ -18,5 +19,7 @@ __all__ = [
     'Group',
     'LogEndpoint',
     'RoleEndpoint',
-    'User'
+    'User',
+    'UserEndpoint',
+    'WebhookEndpoint'
 ]
