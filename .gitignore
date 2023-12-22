@@ -1,4 +1,16 @@
 .vscode/
 .pytest_cache/
 __pycache__/
-docs
+.dist/
+.ruff_cache/
+.coverage
+.coverage.*
+coverage.xml
+*.pyc
+*.egg-info/
+*.egg
+docs/_build
+docs/build
+.mypy_cache/
+.DS_store
+.envrc

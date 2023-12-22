@@ -1,0 +1,38 @@
+name: build
+
+on:
+    workflow_dispatch:
+
+jobs:
+    build:
+        runs-on: ubuntu-latest
+        strategy:
+            fail-fast: false
+        env:
+            POETRY_PYPI_TOKEN_PYPI: ${{ secrets.PYFIVETRAN_BUILD_KEY }}
+        
+        name: Poetry build and publish
+        steps:
+            - uses: actions/checkout@v3
+    
+            - name: Set up Python 3.11
+              uses: actions/setup-python@v4
+              with:
+                  python-version: "3.11"
+
+            - name: Install poetry
+              uses: snok/install-poetry@v1
+              with:
+                  virtualenvs-create: true
+                  virtualenvs-in-project: true
+
+            - name: Install dependencies
+              run: poetry install --with dev --no-interaction
+
+            - name: Build package
+              shell: bash
+              run: poetry build
+
+            - name: Publish package
+              shell: bash
+              run: poetry publish

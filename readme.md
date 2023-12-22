@@ -2,6 +2,10 @@
 
 A simple Python wrapper around the Fivetran REST API.
 
+----------------------------------------------------------------
+![GitHub Workflow Status (with event)](https://img.shields.io/github/actions/workflow/status/:user/:repo/:workflow)
+
+
 ## Installation
 
 ```bash

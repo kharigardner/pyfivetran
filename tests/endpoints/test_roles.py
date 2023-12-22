@@ -2,7 +2,8 @@
 
 import pytest
 
-from pyfivetran.endpoints.roles import RoleEndpoint, ApiError
+from pyfivetran.endpoints.roles import RoleEndpoint
+from pyfivetran.shed import ApiError
 
 class TestRoleEndpoint:
 

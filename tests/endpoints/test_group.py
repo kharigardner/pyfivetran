@@ -3,7 +3,8 @@ from pytest_mock import MockerFixture
 from datetime import datetime
 from unittest.mock import MagicMock
 
-from pyfivetran.endpoints.group import Group, GroupEndpoint, BASE_API_URL, API_VERSION, ApiError, GeneralApiResponse
+from pyfivetran.shed import ApiError
+from pyfivetran.endpoints.group import Group, GroupEndpoint, BASE_API_URL, API_VERSION, GeneralApiResponse
 
 
 class TestGroup:
