@@ -3,7 +3,9 @@
 A simple Python wrapper around the Fivetran REST API.
 
 ----------------------------------------------------------------
-![GitHub Workflow Status (with event)](https://img.shields.io/github/actions/workflow/status/:user/:repo/:workflow)
+![GitHub Workflow Status (with event)](https://img.shields.io/github/actions/workflow/status/kharigardner/pyfivetran/test.yml?label=tests)
+![GitHub Workflow Status (with event)](https://img.shields.io/github/actions/workflow/status/kharigardner/pyfivetran/build.yml?label=build)
+![License](https://img.shields.io/pypi/l/pyfivetran)
 
 
 ## Installation

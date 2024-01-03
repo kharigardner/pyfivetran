@@ -349,3 +349,25 @@ class ConnectorEndpoint(Endpoint):
         )
 
         return list(map(lambda x: x.json(), resp_list))
+
+    def create_connector(self, connector: Connector | dict[str, Any]) -> Connector:
+        """
+        Creates a new connector.
+
+        :param connector: Connector
+        :return: Connector
+        """
+        if isinstance(connector, Connector):
+            connector = connector.raw
+            for k, v in connector.items():
+                if v is None:
+                    del connector[k]
+
+        return Connector._from_dict(
+            endpoint=self,
+            d=self._request(
+                method="POST",
+                url=f"{self.BASE_URL}/connectors",
+                json=connector,
+            ).json()["data"],
+        )
