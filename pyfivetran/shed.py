@@ -1,3 +1,5 @@
+from __future__ import annotations # for | union syntax
+
 from typing import TypedDict, Dict, Any, Optional
 
 BASE_API_URL = 'https://api.fivetran.com'

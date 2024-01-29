@@ -1,3 +1,5 @@
+from __future__ import annotations # for | union syntax
+
 from logging import getLogger
 import datetime as dt
 

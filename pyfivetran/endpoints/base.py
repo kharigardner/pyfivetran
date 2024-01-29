@@ -1,3 +1,5 @@
+from __future__ import annotations # for | union syntax
+
 from typing import List, Optional, Dict, Any
 from abc import ABC, abstractmethod
 from dataclasses import dataclass

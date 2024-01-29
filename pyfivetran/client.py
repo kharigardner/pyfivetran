@@ -1,3 +1,5 @@
+from __future__ import annotations # for | union syntax
+
 from typing import NamedTuple, Dict
 
 from lazy import lazy
