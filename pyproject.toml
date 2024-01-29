@@ -7,7 +7,7 @@ license = "MIT"
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = "^3.11"
+python = "^3.8, <=3.11"
 httpx = "^0.25.1"
 lazy = "^1.6"
 
