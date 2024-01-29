@@ -4,7 +4,7 @@ version = "0.1.1"
 description = "Pythonic interface to the fivetran API"
 authors = ["Khari Gardner <kharigardner@protonmail.com>"]
 license = "MIT"
-readme = "README.md"
+readme = "readme.md"
 
 [tool.poetry.dependencies]
 python = "^3.8, <3.12"
