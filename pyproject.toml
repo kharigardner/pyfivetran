@@ -11,6 +11,7 @@ python = "^3.8, <3.12"
 httpx = "^0.25.1"
 lazy = "^1.6"
 pytz = "^2024.1"
+python-dateutil = "^2.9.0.post0"
 
 
 [tool.poetry.group.dev.dependencies]
