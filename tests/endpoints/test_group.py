@@ -3,6 +3,8 @@ from pytest_mock import MockerFixture
 from datetime import datetime
 from unittest.mock import MagicMock
 
+import pytz
+
 from pyfivetran.shed import ApiError
 from pyfivetran.endpoints.group import Group, GroupEndpoint, BASE_API_URL, API_VERSION, GeneralApiResponse
 
@@ -69,7 +71,7 @@ class TestGroup:
         group = Group._from_dict(group_endpoint_mock, group_dict)
         assert group.fivetran_id == '123'
         assert group.name == 'Test Group'
-        assert group.created_at == datetime(2022, 1, 1)
+        assert group.created_at == datetime(2022, 1, 1, tzinfo=pytz.utc)
         assert group._raw == group_dict
 
     def test_delete(self, group_endpoint_mock):
@@ -188,7 +190,7 @@ class TestGroupEndpoint:
         group = group_endpoint.create_group(group_name)
         assert group.name == group_name
         assert group.fivetran_id == '123'
-        assert group.created_at == datetime(2022, 1, 1, 0, 0, 0)
+        assert group.created_at == datetime(2022, 1, 1, 0, 0, 0, tzinfo=pytz.utc)
 
     # can list groups with valid limit (fixed)
     def test_list_groups_with_valid_limit_fixed(self, mocker):

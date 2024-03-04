@@ -2,6 +2,7 @@
 
 import pytest
 
+import pytz
 from pyfivetran.endpoints.users import UserEndpoint, User, Client, datetime
 
 
@@ -28,8 +29,8 @@ class TestUser:
         assert user.verified == True
         assert user.role == "admin"
         assert user.active == True
-        assert user.created_at == datetime(2022, 1, 1, 0, 0, 0)
-        assert user.logged_in_at == datetime(2022, 1, 1, 0, 0, 0)
+        assert user.created_at == datetime(2022, 1, 1, 0, 0, 0, tzinfo=pytz.utc)
+        assert user.logged_in_at == datetime(2022, 1, 1, 0, 0, 0, tzinfo=pytz.utc)
         assert user.family_name == None
         assert user.given_name == None
         assert user.invited == None
@@ -81,8 +82,8 @@ class TestUser:
         assert user.verified == True
         assert user.role == "admin"
         assert user.active == True
-        assert user.created_at == datetime(2022, 1, 1, 0, 0, 0)
-        assert user.logged_in_at == datetime(2022, 1, 1, 0, 0, 0)
+        assert user.created_at == datetime(2022, 1, 1, 0, 0, 0, tzinfo=pytz.utc)
+        assert user.logged_in_at == datetime(2022, 1, 1, 0, 0, 0, tzinfo=pytz.utc)
         assert user.family_name == "Doe"
         assert user.given_name == "John"
         assert user.invited == True
@@ -111,8 +112,8 @@ class TestUser:
         assert user.verified == True
         assert user.role == "admin"
         assert user.active == True
-        assert user.created_at == datetime(2022, 1, 1, 0, 0, 0)
-        assert user.logged_in_at == datetime(2022, 1, 1, 0, 0, 0)
+        assert user.created_at == datetime(2022, 1, 1, 0, 0, 0, tzinfo=pytz.utc)
+        assert user.logged_in_at == datetime(2022, 1, 1, 0, 0, 0, tzinfo=pytz.utc)
         assert user.family_name == None
         assert user.given_name == None
         assert user.invited == None

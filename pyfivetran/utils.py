@@ -1,7 +1,10 @@
 from __future__ import annotations # for | union syntax
 
 from logging import getLogger
+from dateutil.parser import isoparse
 import datetime as dt
+import sys
+
 
 logger = getLogger(__name__)
 
@@ -13,7 +16,9 @@ def deserialize_timestamp(dt_str: str) -> dt.datetime:
     :param dt_str: The timestamp to deserialize
     :return: The deserialized timestamp
     """
-    return dt.datetime.strptime(dt_str, "%Y-%m-%dT%H:%M:%SZ")
+    if sys.version_info.minor < 11:
+        return isoparse(dt_str)
+    return dt.datetime.fromisoformat(dt_str)
 
 
 def serialize_timezone(tz: str | dt.tzinfo) -> int:
