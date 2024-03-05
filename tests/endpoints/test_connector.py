@@ -215,7 +215,7 @@ class TestConnectorEndpoint:
             "code": 200,
             "message": "Success",
             "data": {
-                "fivetran_id": "12345",
+                "id": "12345",
                 "service": "example_service",
                 "schema": "example_schema",
                 "paused": False,
@@ -225,6 +225,7 @@ class TestConnectorEndpoint:
                 "connected_by": "user_123",
                 "service_version": 1,
                 "created_at": "2022-01-01T00:00:00Z",
+                "schedule_type": "manual",
             },
         }
 

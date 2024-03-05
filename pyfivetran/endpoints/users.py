@@ -38,7 +38,7 @@ class User(ApiDataclass):
 
     @property
     def raw(self) -> Dict[str, Any]:
-        return self._raw if hasattr(self, "_raw") else self.__dict__
+        return getattr(self, "_raw", self.__dict__)
 
     @property
     def connector_memberships(self) -> Sequence[PaginatedApiResponse]:

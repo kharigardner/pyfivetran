@@ -34,7 +34,7 @@ class ConnectorSchemaEndpoint(Endpoint):
         :param hashed: Whether the column is hashed
         :return: GeneralApiResponse
         """
-        payload = dict()
+        payload = {}
 
         if enabled is not None:
             payload["enabled"] = enabled
@@ -68,7 +68,7 @@ class ConnectorSchemaEndpoint(Endpoint):
         :param tables: The tables within the schema
         :return: GeneralApiResponse
         """
-        payload: Dict[Any, Any] = dict()
+        payload: Dict[Any, Any] = {}
 
         if enabled is not None:
             payload["enabled"] = enabled
@@ -110,7 +110,7 @@ class ConnectorSchemaEndpoint(Endpoint):
                 "Invalid schema_change_handling value provided"
             ) from ValueError()
 
-        payload: Dict[Any, Any] = dict()
+        payload: Dict[Any, Any] = {}
 
         if schemas is not None:
             payload["schemas"] = schemas
@@ -152,7 +152,7 @@ class ConnectorSchemaEndpoint(Endpoint):
         if sync_mode not in ["SOFT_DELETE", "HISTORY", "LIVE"]:
             raise ApiError("Invalid sync_mode value provided") from ValueError()
 
-        payload: Dict[Any, Any] = dict()
+        payload: Dict[Any, Any] = {}
 
         if enabled is not None:
             payload["enabled"] = enabled
@@ -201,7 +201,7 @@ class ConnectorSchemaEndpoint(Endpoint):
         :return: GeneralApiResponse
         """
 
-        payload: Dict[Any, Any] = dict()
+        payload: Dict[Any, Any] = {}
 
         if exclude_mode is not None:
             payload["exclude_mode"] = exclude_mode

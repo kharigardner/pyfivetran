@@ -6,6 +6,7 @@ from dataclasses import dataclass
 
 from httpx import HTTPStatusError
 
+from pyfivetran.utils import deserialize_timestamp
 from pyfivetran.endpoints.base import Endpoint, Client, ApiDataclass
 from pyfivetran.shed import (
     GeneralApiResponse,
@@ -14,9 +15,6 @@ from pyfivetran.shed import (
     ApiError,
     PaginatedApiResponse,
 )
-
-if TYPE_CHECKING:
-    pass
 
 
 @dataclass
@@ -32,6 +30,7 @@ class Connector(ApiDataclass):
     service_version: int
     created_at: datetime | str
     data_delay_senstivity: Literal["LOW", "NORMAL", "HIGH", "CUSTOM"] = "NORMAL"
+
     setup_tests: Optional[List[Dict[str, Any]]] = None
     source_sync_details: Optional[Dict[str, Any]] = None
     data_delay_threshold: Optional[int] = 0
@@ -79,7 +78,7 @@ class Connector(ApiDataclass):
         ]:
             raise ApiError("Invalid sync_frequency value provided") from ValueError()
 
-        payload: Dict[str, Any] = dict()
+        payload: Dict[str, Any] = {}
 
         if config is not None:
             payload["config"] = config
@@ -129,14 +128,14 @@ class Connector(ApiDataclass):
             method="PATCH", url=f"{self.as_url}/state", json=state
         ).json()
 
-    def delete(self) -> GeneralApiResponse:
+    def delete(self) -> Optional[GeneralApiResponse]:
         """
         Deletes the connector.
         :return: GeneralApiResponse
         """
         # TODO: need to adjust this to use the endpoint attribute
+        obj = self.endpoint.client.delete(url=self.as_url)
         try:
-            obj = self.endpoint.client.delete(url=self.as_url)
             obj.raise_for_status()
             obj_json = obj.json()
             self._is_deleted = True
@@ -170,7 +169,7 @@ class Connector(ApiDataclass):
         :param trust_fingerprints: Whether to trust fingerprints
         :return: GeneralApiResponse
         """
-        payload = dict()
+        payload = {}
 
         if trust_certificates is not None:
             payload["trust_certificates"] = trust_certificates
@@ -211,40 +210,40 @@ class Connector(ApiDataclass):
         # convert to datetimes
         # timestamps come in the format: 2019-08-24T14:15:22Z
         if d.get("succeeded_at") and isinstance(d.get("succeeded_at"), str):
-            d["succeeded_at"] = datetime.strptime(
-                d.get("succeeded_at"), "%Y-%m-%dT%H:%M:%SZ"
-            )  # type: ignore
+            d["succeeded_at"] = deserialize_timestamp(
+                d["succeeded_at"]
+            )
         if d.get("created_at") and isinstance(d.get("created_at"), str):
-            d["created_at"] = datetime.strptime(
-                d.get("created_at"), "%Y-%m-%dT%H:%M:%SZ"
-            )  # type: ignore
+            d["created_at"] = deserialize_timestamp(
+                d["created_at"]
+            )
         if d.get("failed_at") and isinstance(d.get("failed_at"), str):
-            d["failed_at"] = datetime.strptime(d.get("failed_at"), "%Y-%m-%dT%H:%M:%SZ")  # type: ignore
+            d["failed_at"] = deserialize_timestamp(d["failed_at"])
 
         cls_to_return = cls(
-            fivetran_id=d.get("id"),  # type: ignore
-            service=d.get("service"),  # type: ignore
-            schema=d.get("schema"),  # type: ignore
-            paused=d.get("paused"),  # type: ignore
+            fivetran_id=d['id'],
+            service=d['service'],
+            schema=d['schema'],
+            paused=d['paused'],
             status=d.get("status"),
             daily_sync_time=d.get("daily_sync_time"),
             succeeded_at=d.get("succeeded_at"),
             connect_card=d.get("connect_card"),
-            sync_frequency=d.get("sync_frequency"),  # type: ignore
-            pause_after_trial=d.get("pause_after_trial"),  # type: ignore
+            sync_frequency=int(d["sync_frequency"]),
+            pause_after_trial=bool(d["pause_after_trial"]),
             data_delay_threshold=d.get("data_delay_threshold"),
-            group_id=d.get("group_id"),  # type: ignore
-            connected_by=d.get("connected_by"),  # type: ignore
+            group_id=str(d["group_id"]),
+            connected_by=d["connected_by"],
             setup_tests=d.get("setup_tests"),
             source_sync_details=d.get("source_sync_details"),
-            service_version=d.get("service_version"),  # type: ignore
-            created_at=d.get("created_at"),  # type: ignore
+            service_version=d["service_version"],
+            created_at=d["created_at"], 
             failed_at=d.get("failed_at"),
-            schedule_type=d.get("schedule_type"),  # type: ignore
+            schedule_type=d["schedule_type"],
             connect_card_config=d.get("connect_card_config"),
             config=d.get("config"),
             _is_deleted=False,
-            endpoint=endpoint,
+            endpoint=endpoint
         )
 
         setattr(cls_to_return, "_raw", d)
