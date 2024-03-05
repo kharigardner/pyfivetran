@@ -76,3 +76,6 @@ class ApiDataclass(ABC):
     @abstractmethod
     def _from_dict(cls, endpoint, d: Dict[str, Any]) -> "ApiDataclass":
         ...
+
+    def __repr__(self) -> str:
+        return f"{self.__class__.__name__}(endpoint={self.endpoint.__class__.__name__}, fivetran_id={getattr(self, 'fivetran_id', None) or 'None'})"

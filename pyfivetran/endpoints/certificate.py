@@ -54,7 +54,7 @@ class CertificateEndpoint(Endpoint):
 
     def approve_fingerprint(
         self,
-        hash: str,
+        hash_: str,
         public_key: str | bytes,
         connector_id: Optional[str] = None,
         destination_id: Optional[str] = None,
@@ -73,7 +73,7 @@ class CertificateEndpoint(Endpoint):
             # just have to serialize it as a string for the API
             public_key = str(public_key)
 
-        payload = {"hash": hash, "public_key": public_key}
+        payload = {"hash": hash_, "public_key": public_key}
 
         if connector_id:
             endpoint_ = f"/connectors/{connector_id}/fingerprints"
@@ -88,7 +88,7 @@ class CertificateEndpoint(Endpoint):
 
     def get_certificate_details(
         self,
-        hash: str | bytes,
+        hash_: str | bytes,
         connector_id: Optional[str] = None,
         destination_id: Optional[str] = None,
     ) -> GeneralApiResponse:
@@ -100,14 +100,14 @@ class CertificateEndpoint(Endpoint):
         :param connector_id: Unique ID of the connector in Fivetran
         :return: GeneralApiResponse
         """
-        if isinstance(hash, bytes):
+        if isinstance(hash_, bytes):
             # just have to serialize it as a string for the API
-            hash = str(hash)
+            hash_ = str(hash_)
 
         if connector_id:
-            endpoint_ = f"/connectors/{connector_id}/certificates/{hash}"
+            endpoint_ = f"/connectors/{connector_id}/certificates/{hash_}"
         elif destination_id:
-            endpoint_ = f"/destinations/{destination_id}/certificates/{hash}"
+            endpoint_ = f"/destinations/{destination_id}/certificates/{hash_}"
         else:
             raise ValueError("Either connector_id or destination_id must be provided")
 
@@ -115,7 +115,7 @@ class CertificateEndpoint(Endpoint):
 
     def get_fingerprint_details(
         self,
-        hash: str | bytes,
+        hash_: str | bytes,
         connector_id: Optional[str] = None,
         destination_id: Optional[str] = None,
     ) -> GeneralApiResponse:
@@ -127,14 +127,14 @@ class CertificateEndpoint(Endpoint):
         :param connector_id: Unique ID of the connector in Fivetran
         :return: GeneralApiResponse
         """
-        if isinstance(hash, bytes):
+        if isinstance(hash_, bytes):
             # just have to serialize it as a string for the API
-            hash = str(hash)
+            hash_ = str(hash_)
 
         if connector_id:
-            endpoint_ = f"/connectors/{connector_id}/fingerprints/{hash}"
+            endpoint_ = f"/connectors/{connector_id}/fingerprints/{hash_}"
         elif destination_id:
-            endpoint_ = f"/destinations/{destination_id}/fingerprints/{hash}"
+            endpoint_ = f"/destinations/{destination_id}/fingerprints/{hash_}"
         else:
             raise ValueError("Either connector_id or destination_id must be provided")
 
@@ -218,7 +218,7 @@ class CertificateEndpoint(Endpoint):
 
     def revoke_certificate(
         self,
-        hash: str | bytes,
+        hash_: str | bytes,
         connector_id: Optional[str] = None,
         destination_id: Optional[str] = None,
     ) -> GeneralApiResponse:
@@ -230,14 +230,14 @@ class CertificateEndpoint(Endpoint):
         :param connector_id: Unique ID of the connector in Fivetran
         :return: GeneralApiResponse
         """
-        if isinstance(hash, bytes):
+        if isinstance(hash_, bytes):
             # just have to serialize it as a string for the API
-            hash = str(hash)
+            hash_ = str(hash_)
 
         if connector_id:
-            endpoint_ = f"/connectors/{connector_id}/certificates/{hash}"
+            endpoint_ = f"/connectors/{connector_id}/certificates/{hash_}"
         elif destination_id:
-            endpoint_ = f"/destinations/{destination_id}/certificates/{hash}"
+            endpoint_ = f"/destinations/{destination_id}/certificates/{hash_}"
         else:
             raise ValueError("Either connector_id or destination_id must be provided")
 
@@ -245,7 +245,7 @@ class CertificateEndpoint(Endpoint):
 
     def revoke_fingerprint(
         self,
-        hash: str | bytes,
+        hash_: str | bytes,
         connector_id: Optional[str] = None,
         destination_id: Optional[str] = None,
     ) -> GeneralApiResponse:
@@ -257,14 +257,14 @@ class CertificateEndpoint(Endpoint):
         :param connector_id: Unique ID of the connector in Fivetran
         :return: GeneralApiResponse
         """
-        if isinstance(hash, bytes):
+        if isinstance(hash_, bytes):
             # just have to serialize it as a string for the API
-            hash = str(hash)
+            hash_ = str(hash_)
 
         if connector_id:
-            endpoint_ = f"/connectors/{connector_id}/fingerprints/{hash}"
+            endpoint_ = f"/connectors/{connector_id}/fingerprints/{hash_}"
         elif destination_id:
-            endpoint_ = f"/destinations/{destination_id}/fingerprints/{hash}"
+            endpoint_ = f"/destinations/{destination_id}/fingerprints/{hash_}"
 
         else:
             raise ValueError("Either connector_id or destination_id must be provided")

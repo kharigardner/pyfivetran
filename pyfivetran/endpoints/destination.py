@@ -35,7 +35,7 @@ class Destination(ApiDataclass):
 
     @property
     def raw(self) -> Dict[str, Any]:
-        return self._raw if hasattr(self, "_raw") else self.__dict__
+        return getattr(self, "_raw", self.__dict__)
 
     def delete(self) -> GeneralApiResponse:
         resp = self.endpoint._request(method="DELETE", url=self.as_url).json()
@@ -71,7 +71,7 @@ class Destination(ApiDataclass):
         else:
             region = region
 
-        payload: Dict[str, Any] = dict()
+        payload: Dict[str, Any] = {}
 
         if region is not None:
             payload["region"] = region
@@ -109,7 +109,7 @@ class Destination(ApiDataclass):
         :param trust_fingerprints: Whether to trust fingerprints
         :return: GeneralApiResponse
         """
-        payload = dict()
+        payload = {}
 
         if trust_certificates is not None:
             payload["trust_certificates"] = trust_certificates
@@ -194,9 +194,13 @@ class DestinationEndpoint(Endpoint):
         """
         if isinstance(region, str):
             try:
-                region = Region(region)
+                Region(region.upper())
             except ValueError as e:
                 raise ValueError(f"Invalid region: {region}") from e
+        elif isinstance(region, Region):
+            region = region.name.lower()
+        else:
+            region = None
 
         if isinstance(time_zone_offset, (str, tzinfo)):
             time_zone_offset = serialize_timezone(time_zone_offset)
