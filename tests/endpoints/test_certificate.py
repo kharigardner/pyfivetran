@@ -80,7 +80,7 @@ class TestCertificateEndpoint:
 
         # Call the approve_fingerprint method with connector_id
         response = endpoint.approve_fingerprint(
-            hash="12345", public_key="abcde", connector_id="connector_123"
+            hash_="12345", public_key="abcde", connector_id="connector_123"
         )
 
         # Assert that the _request method was called with the correct parameters
@@ -121,7 +121,7 @@ class TestCertificateEndpoint:
 
         # Call the get_certificate_details method with connector_id
         response = endpoint.get_certificate_details(
-            hash="12345", connector_id="connector_123"
+            hash_="12345", connector_id="connector_123"
         )
 
         # Assert that the _request method was called with the correct parameters
@@ -138,7 +138,7 @@ class TestCertificateEndpoint:
 
         # Call the get_certificate_details method with destination_id
         response = endpoint.get_certificate_details(
-            hash="12345", destination_id="destination_123"
+            hash_="12345", destination_id="destination_123"
         )
 
         # Assert that the _request method was called with the correct parameters
@@ -160,15 +160,15 @@ class TestCertificateEndpoint:
 
         # Call the approve_fingerprint method without connector_id or destination_id
         with pytest.raises(ValueError):
-            endpoint.approve_fingerprint(hash="12345", public_key="abcde")
+            endpoint.approve_fingerprint(hash_="12345", public_key="abcde")
 
         # Call the get_certificate_details method without connector_id or destination_id
         with pytest.raises(ValueError):
-            endpoint.get_certificate_details(hash="12345")
+            endpoint.get_certificate_details(hash_="12345")
 
         # Call the get_fingerprint_details method without connector_id or destination_id
         with pytest.raises(ValueError):
-            endpoint.get_fingerprint_details(hash="12345")
+            endpoint.get_fingerprint_details(hash_="12345")
 
         # Call the get_fingerprints method without connector_id or destination_id
         with pytest.raises(ValueError):

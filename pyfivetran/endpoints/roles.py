@@ -20,7 +20,7 @@ class RoleEndpoint(Endpoint):
         :param limit: The number of records to return
         :return: List[PaginatedApiResponse]
         """
-        params = dict()
+        params = {}
 
         if limit is not None:
             params["limit"] = limit

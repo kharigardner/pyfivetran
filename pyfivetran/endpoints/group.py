@@ -28,7 +28,7 @@ class Group(ApiDataclass):
 
     @property
     def raw(self) -> Dict[str, Any]:
-        return self._raw if hasattr(self, "_raw") else self.__dict__
+        return getattr(self, "_raw", self.__dict__)
 
     @property
     def public_key(self) -> str:
@@ -106,7 +106,7 @@ class Group(ApiDataclass):
         :param role: The role of the user to add
         :return: GeneralApiResponse
         """
-        payload = dict()
+        payload = {}
 
         if not email and not role:
             raise ValueError("Either email or role must be provided")
@@ -124,7 +124,7 @@ class Group(ApiDataclass):
     # TODO: change this to serialize to the Connector dataclass
     def list_connectors(
         self, schema: Optional[str] = None, limit: Optional[int] = None
-    ) -> List[PaginatedApiResponse]:
+    ) -> List[PaginatedApiResponse]:  # sourcery skip: class-extract-method
         """
         Returns a list of connectors in a group in your Fivetran account.
 
@@ -132,7 +132,7 @@ class Group(ApiDataclass):
         :param limit: The number of records to return
         :return: List[PaginatedApiResponse]
         """
-        params: Dict[str, str | int] = dict()
+        params: Dict[str, str | int] = {}
 
         if schema is not None:
             params["schema"] = schema
@@ -158,7 +158,7 @@ class Group(ApiDataclass):
         :param limit: The number of records to return
         :return: List[PaginatedApiResponse]
         """
-        params = dict()
+        params = {}
 
         if limit is not None:
             params["limit"] = limit
@@ -215,7 +215,7 @@ class GroupEndpoint(Endpoint):
         :param limit: The number of records to return
         :return: List[PaginatedApiResponse]
         """
-        params = dict()
+        params = {}
 
         if limit is not None:
             params["limit"] = limit

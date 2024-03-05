@@ -16,7 +16,7 @@ from pyfivetran.endpoints import (
     UserEndpoint,
     WebhookEndpoint,
 )
-
+from pyfivetran.shed import GeneralApiResponse
 
 class AuthenticationTuple(NamedTuple):
     basic: httpx.BasicAuth
@@ -34,6 +34,14 @@ class FivetranClient:
         self.api_key = api_key
         self.api_secret = api_secret
         self._client = httpx.Client()
+
+    @lazy
+    def account_info(self) -> GeneralApiResponse:
+        """
+        Returns information about current account from API key.
+        """
+        url = '"https://api.fivetran.com/v1/account/info"'
+        return self.client.get(url).json()
 
     @property
     def authentication(self) -> AuthenticationTuple:
