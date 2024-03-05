@@ -28,12 +28,12 @@ class FivetranClient:
     Interface class for Fivetran API interactions via endpoints.
     """
 
-    def __init__(self, api_key: str, api_secret: str) -> None:
+    def __init__(self, api_key: str, api_secret: str, **httpx_kwargs) -> None:
         if not api_key or not api_secret:
             raise ValueError("api_key and api_secret are required")
         self.api_key = api_key
         self.api_secret = api_secret
-        self._client = httpx.Client()
+        self._client = httpx.Client(**httpx_kwargs)
 
     @lazy
     def account_info(self) -> GeneralApiResponse:
