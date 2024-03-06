@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "pyfivetran"
-version = "2024.03.04.03"
+version = "2024.03.05.01"
 description = "Pythonic interface to the fivetran API"
 authors = ["Khari Gardner <kharigardner@protonmail.com>"]
 license = "MIT"
