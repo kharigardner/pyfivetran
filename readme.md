@@ -26,7 +26,7 @@ connector_endpoint = ftran.connector_endpoint
 certificate_endpoint = ftran.certificate_endpoint
 ```
 
-For more examples, see the [examples](https://github.com/kharigardner/pyfivetran/examples) directory.
+For more examples, see the [examples](https://github.com/kharigardner/pyfivetran/tree/main/examples) directory.
 
 ## Development
 
