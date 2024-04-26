@@ -11,7 +11,7 @@ class GeneralApiResponse(TypedDict):
     data: Optional[Dict[str, Any]]
     
 class ApiError(Exception):
-    def __inti__(self, msg: str):
+    def __init__(self, msg: str):
         self.msg = msg
 
     def __str__(self):
