@@ -5,7 +5,7 @@ A simple Python wrapper around the Fivetran REST API.
 ----------------------------------------------------------------
 ![GitHub Workflow Status (with event)](https://img.shields.io/github/actions/workflow/status/kharigardner/pyfivetran/test.yml?label=tests)
 ![GitHub Workflow Status (with event)](https://img.shields.io/github/actions/workflow/status/kharigardner/pyfivetran/build.yml?label=build)
-![License](https://img.shields.io/pypi/l/pyfivetran)
+[![License](https://img.shields.io/pypi/l/pyfivetran)](https://github.com/kharigardner/pyfivetran/tree/main/LICENSE)
 
 
 ## Installation
@@ -26,7 +26,7 @@ connector_endpoint = ftran.connector_endpoint
 certificate_endpoint = ftran.certificate_endpoint
 ```
 
-For more examples, see the [examples](https://github.com/kharigardner/pyfivetran/examples) directory.
+For more examples, see the [examples](https://github.com/kharigardner/pyfivetran/tree/main/examples) directory.
 
 ## Development
 
@@ -53,4 +53,4 @@ Pull requests are welcome. For major changes, please open an issue first to disc
 
 ## License
 
-MIT. Fivetran API is subject to licensing, usage, and other terms and conditions not covered by this project. For more information, see the [Fivetran API documentation](https://fivetran.com/docs/rest-api).
+[MIT](https://github.com/kharigardner/pyfivetran/tree/main/LICENSE). Fivetran API is subject to licensing, usage, and other terms and conditions not covered by this project. For more information, see the [Fivetran API documentation](https://fivetran.com/docs/rest-api).
