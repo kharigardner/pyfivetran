@@ -1,13 +1,13 @@
 [tool.poetry]
 name = "pyfivetran"
-version = "2024.04.26.01"
+version = "2024.06.05.01"
 description = "Pythonic interface to the fivetran API"
 authors = ["Khari Gardner <kharigardner@protonmail.com>"]
 license = "MIT"
 readme = "readme.md"
 
 [tool.poetry.dependencies]
-python = "^3.8, <3.12"
+python = "^3.8"
 httpx = "^0.25.1"
 lazy = "^1.6"
 pytz = "^2024.1"
