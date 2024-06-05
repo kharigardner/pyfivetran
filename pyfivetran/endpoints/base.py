@@ -3,12 +3,18 @@ from __future__ import annotations # for | union syntax
 from typing import List, Optional, Dict, Any
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
+import time
+
 from httpx import Client, Response
 
 from pyfivetran.shed import ApiError, PaginatedApiResponse
+from pyfivetran.utils import logger
 
+RECOVERABLE_STATUS_CODES = [429, 500]
 
 class Endpoint(ABC):
+    MAX_RETRIES = 3
+
     def __init__(self, client: Client) -> None:
         self.client = client
 
@@ -16,12 +22,27 @@ class Endpoint(ABC):
         """
         Helper function to make an API request
         """
+        if kwargs.get('retry_count', 0) >= self.MAX_RETRIES:
+            logger.error("Max retries exceeded")
+            raise ApiError("Max retries exceeded") from kwargs['caught_exception']
+
         built_request = self.client.build_request(**kwargs)
         response = self.client.send(built_request)
 
         try:
             response.raise_for_status()
         except Exception as e:
+            if response.status_code in RECOVERABLE_STATUS_CODES:
+                if response.status_code == 429:
+                    if retry_after := response.headers.get('Retry-After'):
+                        time.sleep(int(retry_after))
+                    else:
+                        raise ApiError("No Retry-After header when 429 status code") from e
+
+                kwargs['retry_count'] = kwargs.get('retry_count', 0) + 1
+                kwargs['caught_exception'] = e
+
+                return self._request(**kwargs)
             raise ApiError(response.text) from e
 
         return response

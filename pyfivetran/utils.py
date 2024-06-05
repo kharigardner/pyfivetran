@@ -6,7 +6,7 @@ import datetime as dt
 import sys
 
 
-logger = getLogger(__name__)
+logger = getLogger('pyfivetran')
 
 
 def deserialize_timestamp(dt_str: str) -> dt.datetime:
